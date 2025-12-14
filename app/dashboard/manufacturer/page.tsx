@@ -1,14 +1,39 @@
 'use client'
 
+import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Package, Truck, AlertCircle, TrendingUp, Plus, RefreshCw, Box, ClipboardList, Syringe, QrCode } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { useState } from 'react'
+import React, { useState } from 'react'
+
+// Mock Data
+const MOCK_INVENTORY = [
+    { name: 'Amoxicillin 500mg', sku: 'AMX-500', stock: 4500, status: 'In Stock' },
+    { name: 'Ibuprofen 400mg', sku: 'IBU-400', stock: 1200, status: 'In Stock' },
+    { name: 'Paracetamol 500mg', sku: 'PAR-500', stock: 50, status: 'Low Stock' },
+    { name: 'Omeprazole 20mg', sku: 'OME-020', stock: 2300, status: 'In Stock' },
+    { name: 'Metformin 500mg', sku: 'MET-500', stock: 5600, status: 'In Stock' },
+    { name: 'Atorvastatin 10mg', sku: 'ATO-010', stock: 3200, status: 'In Stock' },
+    { name: 'Amlodipine 5mg', sku: 'AML-005', stock: 890, status: 'Low Stock' },
+    { name: 'Losartan 50mg', sku: 'LOS-050', stock: 4100, status: 'In Stock' },
+    { name: 'Simvastatin 20mg', sku: 'SIM-020', stock: 2100, status: 'In Stock' },
+    { name: 'Lisinopril 10mg', sku: 'LIS-010', stock: 1500, status: 'In Stock' },
+    { name: 'Levothyroxine 50mcg', sku: 'LEV-050', stock: 6700, status: 'In Stock' },
+    { name: 'Azithromycin 250mg', sku: 'AZI-250', stock: 0, status: 'Out of Stock' },
+]
 
 export default function ManufacturerDashboard() {
+    const [activeTab, setActiveTab] = useState('inventory')
+    const [selectedMedicine, setSelectedMedicine] = useState('')
+
+    const handleRestockClick = (sku: string) => {
+        setSelectedMedicine(sku)
+        setActiveTab('restock')
+    }
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -25,7 +50,7 @@ export default function ManufacturerDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <StatCard
                     title="Total Medicines"
-                    value="12"
+                    value={MOCK_INVENTORY.length}
                     icon={ClipboardList}
                     trend="Registered Types"
                 />
@@ -45,7 +70,7 @@ export default function ManufacturerDashboard() {
                 />
                 <StatCard
                     title="Low Stock"
-                    value="2"
+                    value={MOCK_INVENTORY.filter(i => i.stock < 1000).length}
                     icon={AlertCircle}
                     trend="Requires Restock"
                     isWarning
@@ -55,7 +80,7 @@ export default function ManufacturerDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Main Tabs Section */}
                 <div className="lg:col-span-2">
-                    <Tabs defaultValue="inventory" className="w-full">
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                         <TabsList className="grid w-full grid-cols-4 mb-8">
                             <TabsTrigger value="inventory">Inventory</TabsTrigger>
                             <TabsTrigger value="batches">Batches</TabsTrigger>
@@ -70,7 +95,7 @@ export default function ManufacturerDashboard() {
                                     <CardDescription>Real-time view of available stock.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <InventoryTable />
+                                    <InventoryTable onRestock={handleRestockClick} />
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -106,7 +131,7 @@ export default function ManufacturerDashboard() {
                                     <CardDescription>Produce new batches of existing medicines.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <RestockForm />
+                                    <RestockForm selectedMedicine={selectedMedicine} />
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -176,14 +201,7 @@ function StatCard({ title, value, icon: Icon, trend, iconColor, isWarning }: any
     )
 }
 
-function InventoryTable() {
-    const data = [
-        { name: 'Amoxicillin 500mg', sku: 'AMX-500', stock: 4500, status: 'In Stock' },
-        { name: 'Ibuprofen 400mg', sku: 'IBU-400', stock: 1200, status: 'In Stock' },
-        { name: 'Paracetamol 500mg', sku: 'PAR-500', stock: 50, status: 'Low Stock' },
-        { name: 'Omeprazole 20mg', sku: 'OME-020', stock: 2300, status: 'In Stock' },
-    ];
-
+function InventoryTable({ onRestock }: { onRestock: (sku: string) => void }) {
     return (
         <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
@@ -197,18 +215,23 @@ function InventoryTable() {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                    {data.map((item, i) => (
+                    {MOCK_INVENTORY.map((item, i) => (
                         <tr key={i} className="hover:bg-slate-50/50">
                             <td className="px-4 py-3 font-medium text-slate-900">{item.name}</td>
                             <td className="px-4 py-3 font-mono text-slate-500">{item.sku}</td>
                             <td className="px-4 py-3">
-                                <Badge variant={item.status === 'Low Stock' ? 'destructive' : 'outline'} className={item.status === 'In Stock' ? 'bg-green-50 text-green-700 border-green-200' : ''}>
+                                <Badge variant={item.status === 'Out of Stock' || item.status === 'Low Stock' ? 'destructive' : 'outline'} className={item.status === 'In Stock' ? 'bg-green-50 text-green-700 border-green-200' : ''}>
                                     {item.status}
                                 </Badge>
                             </td>
                             <td className="px-4 py-3 font-bold">{item.stock.toLocaleString()}</td>
                             <td className="px-4 py-3">
-                                <Button size="sm" variant="outline" className="h-8 text-blue-600 border-blue-200 hover:bg-blue-50">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-8 text-blue-600 border-blue-200 hover:bg-blue-50"
+                                    onClick={() => onRestock(item.sku)}
+                                >
                                     <Plus className="w-3 h-3 mr-1" /> Restock
                                 </Button>
                             </td>
@@ -225,6 +248,8 @@ function BatchesTable() {
         { id: 'BATCH-2023-001', name: 'Amoxicillin', date: 'Oct 24, 2025', status: 'Completed', qty: 5000 },
         { id: 'BATCH-2023-002', name: 'Ibuprofen', date: 'Oct 25, 2025', status: 'Processing', qty: 2000 },
         { id: 'BATCH-2023-003', name: 'Paracetamol', date: 'Oct 26, 2025', status: 'Pending', qty: 10000 },
+        { id: 'BATCH-2025-004', name: 'Atorvastatin', date: 'Oct 27, 2025', status: 'Processing', qty: 3200 },
+        { id: 'BATCH-2025-005', name: 'Metformin', date: 'Oct 27, 2025', status: 'Pending', qty: 5600 },
     ];
 
     return (
@@ -263,56 +288,104 @@ function BatchesTable() {
 }
 
 function RegisterMedicineForm() {
+    const [submitting, setSubmitting] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setSubmitting(true)
+        toast.loading("Registering Medicine Blueprint...")
+
+        await new Promise(resolve => setTimeout(resolve, 2000))
+
+        setSubmitting(false)
+        toast.dismiss()
+        toast.success("Medicine Registered Successfully!", {
+            description: "Transaction Hash: 0x7f...3a2"
+        })
+    }
+
     return (
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Medicine Name</label>
-                    <Input placeholder="e.g. Amoxicillin 500mg" />
+                    <Input required placeholder="e.g. Amoxicillin 500mg" />
                 </div>
                 <div className="space-y-2">
                     <label className="text-sm font-medium">SKU / Code</label>
-                    <Input placeholder="e.g. AMX-500" />
+                    <Input required placeholder="e.g. AMX-500" />
                 </div>
             </div>
             <div className="space-y-2">
                 <label className="text-sm font-medium">Active Ingredients</label>
-                <Input placeholder="e.g. Amoxicillin Trihydrate" />
+                <Input required placeholder="e.g. Amoxicillin Trihydrate" />
             </div>
             <div className="pt-4">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                    <Plus className="w-4 h-4 mr-2" /> Register Medicine Blueprint
+                <Button disabled={submitting} type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                    {submitting ? (
+                        <>Registering...</>
+                    ) : (
+                        <>
+                            <Plus className="w-4 h-4 mr-2" /> Register Medicine Blueprint
+                        </>
+                    )}
                 </Button>
             </div>
         </form>
     )
 }
 
-function RestockForm() {
+function RestockForm({ selectedMedicine }: { selectedMedicine?: string }) {
+    const [submitting, setSubmitting] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setSubmitting(true)
+        toast.loading("Minting Batch NFTs...")
+
+        await new Promise(resolve => setTimeout(resolve, 2000))
+
+        setSubmitting(false)
+        toast.dismiss()
+        toast.success("Batch Minted & Restocked!", {
+            description: "5000 NFTs created on blockchain."
+        })
+    }
+
     return (
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
                 <label className="text-sm font-medium">Select Medicine</label>
-                <select className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option>Amoxicillin 500mg</option>
-                    <option>Ibuprofen 400mg</option>
-                    <option>Paracetamol 500mg</option>
+                <select
+                    defaultValue={selectedMedicine}
+                    key={selectedMedicine} // Force re-render when default value changes
+                    className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                    {MOCK_INVENTORY.map((med, i) => (
+                        <option key={i} value={med.sku}>{med.name}</option>
+                    ))}
                 </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Batch ID</label>
-                    <Input value="BATCH-2025-004" readOnly className="bg-slate-50 font-mono" />
+                    <Input value="BATCH-2025-006" readOnly className="bg-slate-50 font-mono" />
                 </div>
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Quantity to Mint</label>
-                    <Input type="number" placeholder="e.g. 5000" />
+                    <Input required type="number" placeholder="e.g. 5000" />
                 </div>
             </div>
 
             <div className="pt-4">
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                    <QrCode className="w-4 h-4 mr-2" /> Mint Batch NFTs & Restock
+                <Button disabled={submitting} type="submit" className="w-full bg-green-600 hover:bg-green-700">
+                    {submitting ? (
+                        <>Minting...</>
+                    ) : (
+                        <>
+                            <QrCode className="w-4 h-4 mr-2" /> Mint Batch NFTs & Restock
+                        </>
+                    )}
                 </Button>
             </div>
         </form>

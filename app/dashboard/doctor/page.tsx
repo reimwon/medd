@@ -17,7 +17,7 @@ export default function DoctorDashboard() {
                     <p className="text-slate-500">Manage patient consultations and prescriptions.</p>
                 </div>
                 <Badge variant="outline" className="px-4 py-2 bg-blue-50 text-blue-700 border-blue-200">
-                    <Stethoscope className="w-4 h-4 mr-2" /> Dr. Sarah Mitchell (Lic: 49403)
+                    <Stethoscope className="w-4 h-4 mr-2" /> Dr. Naira (Lic: 49403)
                 </Badge>
             </div>
 
@@ -128,11 +128,11 @@ export default function DoctorDashboard() {
                     <Card className="bg-slate-900 text-white border-slate-800">
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4 mb-4">
-                                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-lg font-bold">
-                                    SM
+                                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800">
+                                    <img src="/profile-naira.png" alt="Profile" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <div className="font-bold text-lg">Dr. Sarah Mitchell</div>
+                                    <div className="font-bold text-lg">Dr. Naira</div>
                                     <div className="text-blue-200 text-sm">General Practitioner</div>
                                 </div>
                             </div>

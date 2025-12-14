@@ -7,72 +7,11 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Search, Filter, Pill, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import Footer from '@/components/Footer';
+
 import { motion } from 'framer-motion';
 
 // Mock Data
-const ALL_MEDICINES = [
-    {
-        id: 1,
-        name: 'Amoxicillin',
-        dosage: '500mg',
-        type: 'Antibiotic',
-        manufacturer: 'PharmaCorp',
-        image: '💊', // Using emoji for now as per "simple" requirement, but can use placeholders
-        batch: 'BATCH-2023-001',
-        verified: true,
-    },
-    {
-        id: 2,
-        name: 'Ibuprofen',
-        dosage: '400mg',
-        type: 'Pain Reliever',
-        manufacturer: 'HealthMed',
-        image: '💊',
-        batch: 'BATCH-2023-004',
-        verified: true,
-    },
-    {
-        id: 3,
-        name: 'Paracetamol',
-        dosage: '500mg',
-        type: 'Analgesic',
-        manufacturer: 'WellnessInc',
-        image: '💊',
-        batch: 'BATCH-2023-012',
-        verified: true,
-    },
-    {
-        id: 4,
-        name: 'Omeprazole',
-        dosage: '20mg',
-        type: 'Antacid',
-        manufacturer: 'PharmaCorp',
-        image: '💊',
-        batch: 'BATCH-2023-009',
-        verified: true,
-    },
-    {
-        id: 5,
-        name: 'Metformin',
-        dosage: '500mg',
-        type: 'Antidiabetic',
-        manufacturer: 'BioLife',
-        image: '💊',
-        batch: 'BATCH-2023-022',
-        verified: true,
-    },
-    {
-        id: 6,
-        name: 'Atorvastatin',
-        dosage: '10mg',
-        type: 'Cardiovascular',
-        manufacturer: 'HealthMed',
-        image: '💊',
-        batch: 'BATCH-2023-015',
-        verified: true,
-    },
-];
+import { ALL_MEDICINES } from '@/lib/mock-data';
 
 export default function MedicinesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -138,7 +77,7 @@ export default function MedicinesPage() {
                 )}
             </main>
 
-            <Footer />
+
         </div>
     );
 }
@@ -170,9 +109,11 @@ function MedicineCard({ medicine }: { medicine: any }) {
                     <p className="font-mono text-xs text-slate-400">{medicine.batch}</p>
                 </div>
 
-                <Button className="w-full justify-between group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    View Details <ArrowRight className="w-4 h-4 ml-2 opacity-60 group-hover:opacity-100" />
-                </Button>
+                <Link href={`/track/${medicine.batch}`} className="block w-full">
+                    <Button className="w-full justify-between group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        View Details <ArrowRight className="w-4 h-4 ml-2 opacity-60 group-hover:opacity-100" />
+                    </Button>
+                </Link>
             </CardContent>
         </Card>
     );

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { Package, Calendar, Activity, Heart, ShieldCheck, QrCode, User, Pill } from 'lucide-react'
+import { Package, Calendar, Heart, ShieldCheck, QrCode, User, Pill } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 
 export default function PatientDashboard() {
@@ -128,10 +128,10 @@ export default function PatientDashboard() {
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-col items-center mb-6">
-                                <div className="w-20 h-20 bg-slate-200 rounded-full mb-4 flex items-center justify-center">
-                                    <User className="w-10 h-10 text-slate-400" />
+                                <div className="w-20 h-20 rounded-full mb-4 overflow-hidden border-2 border-slate-200">
+                                    <img src="/profile-sajuantara.png" alt="Profile" className="w-full h-full object-cover" />
                                 </div>
-                                <h3 className="font-bold text-lg">Alex Johnson</h3>
+                                <h3 className="font-bold text-lg">Sajuantara</h3>
                                 <p className="text-slate-500 text-sm font-mono">0x71...88a</p>
                             </div>
 
@@ -142,7 +142,7 @@ export default function PatientDashboard() {
                                 </div>
                                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                                     <div className="text-xs text-slate-500 uppercase font-bold mb-1">Height</div>
-                                    <div className="font-bold text-slate-900">182cm</div>
+                                    <div className="font-bold text-slate-900">186cm</div>
                                 </div>
                                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                                     <div className="text-xs text-slate-500 uppercase font-bold mb-1">Weight</div>
@@ -152,40 +152,7 @@ export default function PatientDashboard() {
                         </CardContent>
                     </Card>
 
-                    {/* Health Activity Chart */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Health Activity</CardTitle>
-                            <CardDescription>Visits in last 6 months</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="h-32 flex items-end justify-between gap-2 px-2">
-                                {/* Mock Line Chart Area */}
-                                <div className="w-full h-full relative">
-                                    <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
-                                        <path
-                                            d="M0 80 Q 20 70 40 50 T 80 40 T 100 20"
-                                            fill="none"
-                                            stroke="#3b82f6"
-                                            strokeWidth="4"
-                                            strokeLinecap="round"
-                                        />
-                                        <path
-                                            d="M0 80 Q 20 70 40 50 T 80 40 T 100 20 L 100 100 L 0 100 Z"
-                                            fill="url(#gradient)"
-                                            opacity="0.2"
-                                        />
-                                        <defs>
-                                            <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" stopColor="#3b82f6" />
-                                                <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+
 
                     {/* Info Box */}
                     <Card className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-0">

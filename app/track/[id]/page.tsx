@@ -8,10 +8,22 @@ import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
 
+import { ALL_MEDICINES } from '@/lib/mock-data'
+
 export default function TrackDrugPage() {
     const params = useParams() as { id: string }
     const id = params.id || 'Unknown'
     const { address } = useAccount()
+
+    // Find medicine details from shared mock data
+    // In real app, we would fetch this from API/Blockchain
+    const medicine = ALL_MEDICINES.find(m => m.batch === id) || {
+        name: 'Unknown Medicine',
+        dosage: 'N/A',
+        manufacturer: 'Unknown Manufacturer',
+        batch: id,
+        type: 'N/A'
+    }
 
     // Mock Data based on ID
     // For demo, if user is connected, we pretend they own it 
@@ -21,8 +33,8 @@ export default function TrackDrugPage() {
         {
             status: 'MINTED',
             title: 'Manufacturing Complete',
-            description: 'Batch #B-2025-001 created and registered on blockchain.',
-            location: 'MediPharma Factory, NY',
+            description: `Batch #${id} created and registered on blockchain.`,
+            location: `${medicine.manufacturer} Factory, NY`,
             date: 'Oct 12, 2025 • 09:42 AM',
             txHash: '0x7a2...3b1',
             icon: Factory,
@@ -86,14 +98,14 @@ export default function TrackDrugPage() {
                             <Package className="w-10 h-10 text-blue-500" />
                         </div>
                         <div className="flex-1 text-center md:text-left space-y-2">
-                            <h3 className="text-xl font-bold">Amoxicillin 500mg</h3>
+                            <h3 className="text-xl font-bold">{medicine.name} {medicine.dosage}</h3>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
                                 <div className="text-slate-500">Batch Number:</div>
-                                <div className="font-semibold">B-2025-001</div>
+                                <div className="font-semibold">{id}</div>
                                 <div className="text-slate-500">Expiry Date:</div>
                                 <div className="font-semibold">Dec 2027</div>
                                 <div className="text-slate-500">Manufacturer:</div>
-                                <div className="font-semibold text-blue-600">MediPharma Inc.</div>
+                                <div className="font-semibold text-blue-600">{medicine.manufacturer} Inc.</div>
                             </div>
                         </div>
                     </CardContent>

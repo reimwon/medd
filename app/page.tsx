@@ -30,7 +30,7 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-bg.png"
+            src="/hero-bg.jpg"
             alt="Medical Background"
             className="w-full h-full object-cover"
           />
@@ -64,9 +64,11 @@ export default function Home() {
               <Button size="lg" className="h-14 px-8 text-lg bg-accent hover:bg-blue-600 shadow-lg shadow-blue-500/30 w-full sm:w-auto">
                 Get Started <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-blue-400/30 text-blue-100 hover:bg-blue-900/50 w-full sm:w-auto">
-                Learn More
-              </Button>
+              <Link href="#features">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-blue-400/30 text-blue-100 hover:bg-blue-900/50 w-full sm:w-auto">
+                  Learn More
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -75,7 +77,7 @@ export default function Home() {
 
 
       {/* Platform Features */}
-      <section className="py-24 bg-white">
+      <section id="features" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Why MediChain?</h2>
